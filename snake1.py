@@ -6,7 +6,7 @@ from curses import KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN
 from random import randint
 import time
 
-# Just some testing purposes
+# Just some testing purposes beta gamma
 
 curses.initscr()
 win = curses.newwin(20, 60, 0, 0)
