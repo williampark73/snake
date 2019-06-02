@@ -28,7 +28,7 @@ win.addch(food[0], food[1], '*')                                   # Prints the 
 
 while key != 27:                                                   # While Esc key is not pressed
     win.border(0)
-    win.addstr(19, 2, 'P1score : ' + str(score) + ' ')                # Printing 'Score' and
+    win.addstr(19, 2, ' P1score : ' + str(score) + ' ')                # Printing 'Score' and
     #win.addstr(0, 27, ' SNAKE ')                                   # 'SNAKE' strings
     #win.timeout(150 - (len(snake)/5 + len(snake)/10)%120)          # Increases the speed of Snake as its length increases
     win.timeout(150)
@@ -39,13 +39,14 @@ while key != 27:                                                   # While Esc k
     event = win.getch()
     key = key if event == -1 else event                            # Controls key press
 
-
+    """
     if key == ord(' '):                                            # If SPACE BAR is pressed, wait for another
         key = -1                                                   # one (Pause/Resume)
         while key != ord(' '):
             key = win.getch()
         key = prevKey
         continue
+    """
 
     if key not in [KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN, 27]:     # If an invalid key is pressed
         key = prevKey

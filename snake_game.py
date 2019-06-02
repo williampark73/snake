@@ -34,7 +34,7 @@ class SnakeGame:
 
 		return (win,
 			    (agent_one_snake, agent_two_snake), 
-			    (agent_one_key, agent_two_key), 
+			    (agent_one_action, agent_two_action), 
 			    (agent_one_score, agent_two_score), 
 			    (food_1, food_2), 
 			    self.first_to_move
@@ -45,7 +45,7 @@ class SnakeGame:
 
 	# We will assume the action here is legal
 	def successor(self, state, action):
-		raise Exception('Not implemented yet')
+		
 
 	def is_end(self, state):
 		raise Exception('Not implemented yet')
@@ -53,10 +53,10 @@ class SnakeGame:
 	def print_board(self, state):
 		win = state[0]
 		win.border(0)
-    	win.addstr(0, 2, 'P1score: ' + str(state[3][0]) + ' ')                # Printing 'Score' and
+    	win.addstr(0, 2, ' P1score: ' + str(state[3][0]) + ' ')                # Printing 'Score' and
     	#win.timeout(150 - (len(agent_one_snake)/5 + len(agent_one_snake)/10)%120)          # Increases the speed of Snake as its length increases
 
-    	win.addstr(self.board_size[0]-1, 2, 'P2score: ' + str(state[3][1]) + ' ')
+    	win.addstr(self.board_size[0]-1, 2, ' P2score: ' + str(state[3][1]) + ' ')
     	win.timeout(150)
 
 

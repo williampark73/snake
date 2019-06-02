@@ -1,4 +1,5 @@
 from snake_game import SnakeGame
+from human_agent import human_agent
 
 def play_snake_game(agent_one, agent_two):
 	game = SnakeGame(board_size = (40, 60))
