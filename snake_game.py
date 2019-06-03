@@ -136,7 +136,6 @@ class SnakeGame:
 		win.border(0)
 		win.addstr(0, 2, ' P1 score: ' + str(state[3][0]) + '')
 		#win.timeout(150 - (len(agent_one_snake)/5 + len(agent_one_snake)/10)%120)
-=======
 		win.addstr(self.board_size[0]-1, 2, ' P2 score: ' + str(state[3][1]) + ' ')
 		win.timeout(50)
 
