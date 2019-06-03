@@ -34,10 +34,10 @@ class SnakeGame:
 		win.addch(food_2[0], food_2[1], '*')                                   # Prints the food
 
 		return (win,
-			    (agent_one_snake, agent_two_snake), 
-			    (agent_one_action, agent_two_action), 
-			    (agent_one_score, agent_two_score), 
-			    (food_1, food_2), 
+			    (agent_one_snake, agent_two_snake),
+			    (agent_one_action, agent_two_action),
+			    (agent_one_score, agent_two_score),
+			    (food_1, food_2),
 			    self.first_to_move
 		)
 
@@ -46,7 +46,7 @@ class SnakeGame:
 
 	# We will assume the action here is legal
 	def successor(self, state, action):
-		
+
 
 	def is_end(self, state):
 		raise Exception('Not implemented yet')
@@ -95,17 +95,15 @@ class SnakeGame:
 		agent_one_snake = [[4,10], [4,9], [4, 8]]
 		agent_two_snake = [[15, 8], [15, 9], [15, 10]]
 
-		food_1 = [10, 20]
-		food_2 = [20, 20]
+		food = [10, 20]
 
-		win.addch(food_1[0], food_1[1], '*')                                   # Prints the food
-		win.addch(food_2[0], food_2[1], '*')                                   # Prints the food
+		win.addch(food[0], food[1], '*')                                   # Prints the food
 
 		return (win,
-				(agent_one_snake, agent_two_snake), 
-				(agent_one_key, agent_two_key), 
-				(agent_one_score, agent_two_score), 
-				(food_1, food_2), 
+				(agent_one_snake, agent_two_snake),
+				(agent_one_key, agent_two_key),
+				(agent_one_score, agent_two_score),
+				food,
 				self.first_to_move
 		)
 
@@ -129,10 +127,10 @@ class SnakeGame:
 		if snake[0][0] == 19: snake[0][0] = 1
 		if snake[0][1] == 59: snake[0][1] = 1
 		new_state[1][turn] = snake
-		
+
 		if turn == 1:
 			new_state[5] = 0
-		else:	
+		else:
 			new_state[5] = 1
 
 		return tuple(new_state)
@@ -157,23 +155,3 @@ class SnakeGame:
 
 
 		win.addstr(0, 45, ' Time : ' + str(int(time.time() - start_time)) + ' ')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

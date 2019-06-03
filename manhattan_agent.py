@@ -5,7 +5,7 @@ def manhattan_agent(game, state):
 
 	turn = state[5]
 	snake = state[1][turn]
-	food = state[4][turn]
+	food = state[4]
 
 	key = None
 
@@ -19,6 +19,5 @@ def manhattan_agent(game, state):
 			key = KEY_LEFT
 		elif snake[0][1] < food[1]:
 			key = KEY_RIGHT
-		
+
 	return key
-	
