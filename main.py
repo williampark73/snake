@@ -12,21 +12,21 @@ def play_snake_game(agent_one, agent_two):
 		action = agent_one(game, state)
 		state = game.successor(state, action)
 		game.print_board(state)
-		if game.is_end(state) != -1:
+		if game.is_end(state)[0] == True:
 			break
 
 		action = agent_two(game, state)
 		state = game.successor(state, action)
 		game.print_board(state)
-		if game.is_end(state)!= -1:
+		if game.is_end(state)[0] == True:
 			break
 
-	result = game.is_end(state)
+	result = game.is_end(state)[1]
 	if result == 0:
 		print("Tie game")
 	elif result == 1:
-		print("Player 1 wins")
-	else:
 		print("Player 2 wins")
+	else:
+		print("Player 1 wins")
 
 play_snake_game(manhattan_agent, manhattan_agent)
