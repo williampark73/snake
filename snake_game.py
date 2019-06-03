@@ -54,18 +54,22 @@ class SnakeGame:
 
 		new_state = list(state)
 
+		list(new_state[2])[turn] = action
+
 		new_state[1] = list(state[1])
 		if snake[0][0] == 0: snake[0][0] = 18
 		if snake[0][1] == 0: snake[0][1] = 58
 		if snake[0][0] == 19: snake[0][0] = 1
 		if snake[0][1] == 59: snake[0][1] = 1
 
+
 		food = state[4]
 		win = state[0]
 
 		if snake[0] == food:                                            # When snake eats the food
 			food = []
-			#score += 100
+			#scores = list(state[3])
+			#new_state[3][turn] = scores[turn] + 100
 			while food == []:
 				food = [randint(1, 18), randint(1, 58)]                 # Calculating next food's coordinates
 				if food in snake: food = []
