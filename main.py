@@ -1,6 +1,7 @@
 from snake_game import SnakeGame
 from human_agent import human_agent
 from manhattan_agent import manhattan_agent
+from minimax_agent import minimax_agent_first_index, minimax_agent_second_index
 
 def play_snake_game(agent_one, agent_two):
 	game = SnakeGame(board_size = (40, 60))
@@ -8,7 +9,6 @@ def play_snake_game(agent_one, agent_two):
 	game.print_board(state)
 
 	while True:
-
 		action = agent_one(game, state)
 		state = game.successor(state, action)
 		game.print_board(state)
@@ -29,4 +29,4 @@ def play_snake_game(agent_one, agent_two):
 	else:
 		print("Player 1 wins")
 
-play_snake_game(human_agent, manhattan_agent)
+play_snake_game(manhattan_agent, minimax_agent_second_index)

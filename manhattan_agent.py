@@ -7,6 +7,9 @@ def manhattan_agent(game, state):
 
 	key = None
 
+	win = state[0]
+	win.getch()
+
 	if snake[0][0] != food[0]:
 		if snake[0][0] > food[0]:
 			key = KEY_UP
