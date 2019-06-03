@@ -16,7 +16,7 @@ def human_agent(game, state):
 from curses import KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN
 
 def human_agent(game, state):
-	actions = game.actions(state)
+	actions = game.actions()
 
 	win = state[0]
 
@@ -29,4 +29,3 @@ def human_agent(game, state):
 		return key
 
 	return KEY_RIGHT
-	

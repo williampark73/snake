@@ -40,7 +40,7 @@ class SnakeGame:
 				self.first_to_move
 		)
 
-	def actions(self, state):
+	def actions(self):
 		return [KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN]
 
 	# We will assume the action here is legal
