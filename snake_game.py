@@ -59,6 +59,21 @@ class SnakeGame:
 		if snake[0][1] == 0: snake[0][1] = 58
 		if snake[0][0] == 19: snake[0][0] = 1
 		if snake[0][1] == 59: snake[0][1] = 1
+
+		food = state[4]
+		win = state[0]
+
+		if snake[0] == food:                                            # When snake eats the food
+			food = []
+			#score += 100
+			while food == []:
+				food = [randint(1, 18), randint(1, 58)]                 # Calculating next food's coordinates
+				if food in snake: food = []
+			new_state[4] = food
+		else:
+			last = snake.pop()                                          # [1] If it does not eat the food, length decreases
+			win.addch(last[0], last[1], ' ')
+
 		new_state[1][turn] = snake
 
 		if turn == 1:
@@ -82,6 +97,10 @@ class SnakeGame:
 
 		agent_one_snake = state[1][0]
 		agent_two_snake = state[1][1]
+
+		food = state[4]
+
+		win.addch(food[0], food[1], '*')
 
 		win.addch(agent_one_snake[0][0], agent_one_snake[0][1], '#')
 		win.addch(agent_two_snake[0][0], agent_two_snake[0][1], '#')
