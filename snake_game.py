@@ -40,7 +40,7 @@ class SnakeGame:
 				self.first_to_move
 		)
 
-	def actions(self, state):
+	def actions(self):
 		return [KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN]
 
 	# We will assume the action here is legal
@@ -80,6 +80,8 @@ class SnakeGame:
 
 		new_state[1][turn] = snake
 
+		new_state[2] = list(new_state[2])
+		new_state[2][turn] = action
 		if turn == 1:
 			new_state[5] = 0
 		else:

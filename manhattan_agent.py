@@ -1,8 +1,6 @@
 from curses import KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN
 
 def manhattan_agent(game, state):
-	actions = game.actions(state)
-
 	turn = state[5]
 	snake = state[1][turn]
 	food = state[4]
