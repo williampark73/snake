@@ -8,7 +8,6 @@ def play_snake_game(agent_one, agent_two):
 	game.print_board(state)
 
 	while True:
-
 		action = agent_one(game, state)
 		state = game.successor(state, action)
 		game.print_board(state)
@@ -29,4 +28,4 @@ def play_snake_game(agent_one, agent_two):
 	else:
 		print("Player 1 wins")
 
-play_snake_game(human_agent, manhattan_agent)
+play_snake_game(manhattan_agent, manhattan_agent)
