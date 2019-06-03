@@ -76,6 +76,8 @@ class SnakeGame:
 
 		new_state[1][turn] = snake
 
+		new_state[2] = list(new_state[2])
+		new_state[2][turn] = action
 		if turn == 1:
 			new_state[5] = 0
 		else:
