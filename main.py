@@ -33,6 +33,8 @@ def play_snake_game(agent_one, agent_two):
 	else:
 		print("Agent 1 score: " + str(result[3]))
 		print("Agent 2 score: " + str(result[2]))
+	print("Agent 1 score: " + str(state[3][0]))
+	print("Agent 2 score: " + str(state[3][1]))
 
 
-play_snake_game(manhattan_agent, manhattan_agent)
+play_snake_game(manhattan_agent, human_agent)

@@ -11,7 +11,7 @@ import time
 
 #for i in range(NUM_ITERATIONS):
 curses.initscr()
-win = curses.newwin(60, 60, 0, 0)
+win = curses.newwin(20, 60, 0, 0)
 win.keypad(1)
 curses.noecho()
 curses.curs_set(0)
@@ -23,9 +23,16 @@ score = 100
 start_time = time.time()
 prev_time = start_time
 
+manhattan = False
+baseline = True
 
-snake = [[4,10], [4,9], [4,8]]                                     # Initial snake co-ordinates
+snake = [[1,3], [1,2], [1,1]]                                     # Initial snake co-ordinates
 food = [10,20]                                                     # First food co-ordinates
+
+state = 0
+counter = 55
+height = 0
+right = True
 
 win.addch(food[0], food[1], '@')                                   # Prints the food
 
@@ -35,7 +42,9 @@ while key != 27:                                                   # While Esc k
     win.border(0)
     win.addstr(0, 2, 'Score : ' + str(score) + ' ')                # Printing 'Score' and
     win.addstr(0, 27, ' SNAKE ')                                   # 'SNAKE' strings
-    win.timeout(50 - (len(snake)/5 + len(snake)/10)%120)          # Increases the speed of Snake as its length increases
+    #win.timeout(50 - (len(snake)/5 + len(snake)/10)%120)          # Increases the speed of Snake as its length increases
+    if score < -40000:
+        win.timeout(50)
 
     '''
     cur_time = int(time.time() - start_time)
@@ -65,16 +74,41 @@ while key != 27:                                                   # While Esc k
     if key not in [KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN, 27]:     # If an invalid key is pressed
         key = prevKey
 
-    if snake[0][0] != food[0]:
-        if snake[0][0] > food[0]:
-            key = KEY_UP
+    if manhattan:
+        if snake[0][0] != food[0]:
+            if snake[0][0] > food[0]:
+                key = KEY_UP
+            else:
+                key = KEY_DOWN
         else:
+            if snake[0][1] > food[1]:
+                key = KEY_LEFT
+            elif snake[0][1] < food[1]:
+                key = KEY_RIGHT
+    elif baseline:
+        if state == 0:
+            if right:
+                key = KEY_RIGHT
+            else:
+                key = KEY_LEFT
+            counter -= 1
+            if counter == 0:
+                right = (right == False)
+                state = 1
+                if height == 17:
+                    state = 2
+                counter = 57
+        elif state == 1:
+            height += 1
             key = KEY_DOWN
-    else:
-        if snake[0][1] > food[1]:
-            key = KEY_LEFT
-        elif snake[0][1] < food[1]:
-            key = KEY_RIGHT
+            state = 0
+        else:
+            key = KEY_UP
+            height -= 1
+            if height == 0:
+                state = 0
+
+
     # Calculates the new coordinates of the head of the snake. NOTE: len(snake) increases.
     # This is taken care of later at [1].
     snake.insert(0, [snake[0][0] + (key == KEY_DOWN and 1) + (key == KEY_UP and -1), snake[0][1] + (key == KEY_LEFT and -1) + (key == KEY_RIGHT and 1)])
@@ -107,5 +141,5 @@ while key != 27:                                                   # While Esc k
 curses.endwin()
 #max_score += score
 
-print("Score: " + str(score))
+print("Score: " + str(score) + " Snake length: " + str(len(snake)))
 #print("Average Score: " + str(max_score/NUM_ITERATIONS))

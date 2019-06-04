@@ -8,7 +8,7 @@ def manhattan_agent(game, state):
 	key = None
 
 	win = state[0]
-	win.getch()
+	win.timeout(100)
 
 	if snake[0][0] != food[0]:
 		if snake[0][0] > food[0]:
