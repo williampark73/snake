@@ -1,6 +1,7 @@
 from snake_game import SnakeGame
 from human_agent import human_agent
 from manhattan_agent import manhattan_agent
+from minimax_agent import minimax_agent_second_index
 
 def play_snake_game(agent_one, agent_two):
 
@@ -35,5 +36,5 @@ def play_snake_game(agent_one, agent_two):
 		print("Agent 1 score: " + str(result[3]))
 		print("Agent 2 score: " + str(result[2]))
 
-play_snake_game(human_agent, manhattan_agent)
+play_snake_game(human_agent, minimax_agent_second_index)
 

@@ -1,16 +1,19 @@
 import random
+from curses import KEY_RIGHT
 
 def minimax_agent_first_index(game, state):
-	return minimax_agent(game, state, 1, 10)
+	return minimax_agent(game, state, 1, 5)
+
 
 def minimax_agent_second_index(game, state):
-	return minimax_agent(game, state, 2, 10)
+	return minimax_agent(game, state, 2, 5)
+
 
 def minimax_agent(game, state, agent_index, depth):
 	win = state[0]
 	win.getch()
-	actions = game.actions()
 
+	actions = game.actions()
 	scores = [minimax_value(game, game.successor(state, action), agent_index, 3 - agent_index, depth) for action in actions]
 	best_score = max(scores)
 	best_indices = [index for index in range(len(scores)) if scores[index] == best_score]
@@ -27,8 +30,12 @@ def minimax_value(game, state, maximizing_agent, agent_index, depth):
 		else:
 			return -float('inf')
 
+	#state[0].timeout(150)
 	if depth == 0:
-		return 1 # No evaluation function as of now
+		food = state[4]
+		snake = state[1][state[5]-1]
+
+		return -((snake[0][0] - food[0])**2 + (snake[0][1] - food[1])**2) # No evaluation function as of now
 
 	actions = game.actions()
 	if state[5] == maximizing_agent:
