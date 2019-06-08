@@ -94,7 +94,7 @@ class SnakeGame:
 		other_snake = state[1][other_player-1]
 
 		# If snake runs into a boundary
-		if snake[0][0] == 1 or snake[0][0] == self.board_size[0]-1 or snake[0][1] == 1 or snake[0][1] == self.board_size[1]-1:
+		if snake[0][0] == 0 or snake[0][0] == self.board_size[0] - 1 or snake[0][1] == 0 or snake[0][1] == self.board_size[1] - 1:
 			curses.endwin()
 			score = state[3][player-1] - 1000
 			other_score = state[3][other_player-1]

@@ -10,15 +10,16 @@ def play_snake_game(agent_one, agent_two):
 	while True:
 		action = agent_one(game, state)
 		state = game.successor(state, action)
-		game.print_board(state)
 		if game.is_end(state)[0] == True:
 			break
+		game.print_board(state)
 
 		action = agent_two(game, state)
 		state = game.successor(state, action)
-		game.print_board(state)
 		if game.is_end(state)[0] == True:
 			break
+		else:
+			game.print_board(state)
 
 	result = game.is_end(state)
 	if result[1] == 0:
