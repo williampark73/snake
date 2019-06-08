@@ -3,7 +3,7 @@ from human_agent import human_agent
 from manhattan_agent import manhattan_agent
 
 def play_snake_game(agent_one, agent_two):
-	game = SnakeGame(board_size = (40, 60))
+	game = SnakeGame(board_size = (30, 120))
 	state = game.start_state()
 	game.print_board(state)
 
@@ -28,4 +28,4 @@ def play_snake_game(agent_one, agent_two):
 	else:
 		print("Player 1 wins")
 
-play_snake_game(manhattan_agent, manhattan_agent)
+play_snake_game(human_agent, manhattan_agent)
