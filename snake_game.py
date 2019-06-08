@@ -28,7 +28,7 @@ class SnakeGame:
 		agent_one_snake = [[4,10], [4,9], [4, 8]]
 		agent_two_snake = [[15, 8], [15, 9], [15, 10]]
 
-		food = [randint(1, self.board_size[0]-2), randint(1, self.board_size[1]-2)] 
+		food = [randint(1, self.board_size[0]-2), randint(1, self.board_size[1]-2)]
 
 		win.addch(food[0], food[1], '*')                                   # Prints the food
 
@@ -50,7 +50,7 @@ class SnakeGame:
 		player = new_state[5]
 		snake = new_state[1][player-1]
 		snake.insert(0, [snake[0][0] + (key == KEY_DOWN and 1) + (key == KEY_UP and -1), snake[0][1] + (key == KEY_LEFT and -1) + (key == KEY_RIGHT and 1)])
-		
+
 		list_snakes = list(new_state[1])
 		list_snakes[player-1] = snake
 		new_state[1] = tuple(list_snakes)
@@ -60,7 +60,7 @@ class SnakeGame:
 		new_state[2] = tuple(list_keys)
 
 		list_scores = list(new_state[3])
-		
+
 		food = new_state[4]
 		win = new_state[0]
 
@@ -74,6 +74,7 @@ class SnakeGame:
 			new_state[4] = food
 		else:
 			last = snake.pop()                                          # [1] If it does not eat the food, length decreases
+			list_scores[player-1] -= 1
 			win.addch(last[0], last[1], ' ')
 
 		new_state[3] = tuple(list_scores)
@@ -93,29 +94,50 @@ class SnakeGame:
 		other_snake = state[1][other_player-1]
 
 		# If snake runs into a boundary
-		if snake[0][0] == 0 or snake[0][0] == self.board_size[0]-1 or snake[0][1] == 0 or snake[0][1] == self.board_size[1]-1:
+		if snake[0][0] == 1 or snake[0][0] == self.board_size[0]-1 or snake[0][1] == 1 or snake[0][1] == self.board_size[1]-1:
 			curses.endwin()
-			return (True, player)
+			score = state[3][player-1] - 1000
+			other_score = state[3][other_player-1]
+			if score > other_score:
+				return (True, other_player, score, other_score)
+			if score < other_score:
+				return (True, player, score, other_score)
+			else:
+				return (True, 0, score, other_score)
 
 		# If snake runs into itself
 		if snake[0] in snake[1:]:
 			curses.endwin()
-			return (True, player)
+			score = state[3][player-1] - 1000
+			other_score = state[3][other_player-1]
+			if score > other_score:
+				return (True, other_player, score, other_score)
+			if score < other_score:
+				return (True, player, score, other_score)
+			else:
+				return (True, 0, score, other_score)
 
 		# If snake runs into the other snake
 		if snake[0] in other_snake[1:]:
 			curses.endwin()
-			return (True, player)
+			score = state[3][player-1] - 500
+			other_score = state[3][other_player-1]
+			if score > other_score:
+				return (True, other_player, score, other_score)
+			if score < other_score:
+				return (True, player, score, other_score)
+			else:
+				return (True, 0, score, other_score)
 
 		return (False, 0)
 
 	def print_board(self, state):
 		win = state[0]
 		win.border(0)
-		win.addstr(0, 2, ' P1score: ' + str(state[3][0]) + '')
+		win.addstr(0, 2, ' P1 score: ' + str(state[3][0]) + '')
 		#win.timeout(150 - (len(agent_one_snake)/5 + len(agent_one_snake)/10)%120)
-		win.addstr(self.board_size[0]-1, 2, ' P2score: ' + str(state[3][1]) + ' ')
-		win.timeout(50)
+		win.addstr(self.board_size[0]-1, 2, ' P2 score: ' + str(state[3][1]) + ' ')
+		win.timeout(150)
 
 		agent_one_snake = state[1][0]
 		agent_two_snake = state[1][1]
