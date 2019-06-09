@@ -1,7 +1,7 @@
 from snake_game import SnakeGame
 from human_agent import human_agent
 from manhattan_agent import manhattan_agent
-from minimax_agent import minimax_agent_second_index
+from minimax_agent import *
 import curses
 
 def play_snake_game(agent_one, agent_two):
