@@ -2,7 +2,7 @@ import random
 from curses import *
 from random import randint
 
-depth = 2
+depth = 5
 
 def minimax_agent_first_index(game, state):
 	return minimax_agent(game, state, 1, depth)
@@ -27,7 +27,9 @@ def get_valid(current_dir, actions):
 def minimax_agent(game, state, agent_index, depth):
 	win = state[0]
 	current_dir = state[2][state[5]-1]
+
 	win.getch()
+
 	actions = get_valid(current_dir, game.actions())
 
 	scores = [minimax_value(game, game.successor(state, action, False), agent_index, 3 - agent_index, depth) for action in actions]
@@ -50,7 +52,6 @@ def minimax_value(game, state, maximizing_agent, agent_index, depth):
 	if depth == 0:
 		food = state[4]
 		snake = state[1][state[5]-1]
-
 		return 100*state[3][state[5]-1] -((snake[0][0] - food[0])**2 + (snake[0][1] - food[1])**2)
 
 	current_dir = state[2][state[5]-1]

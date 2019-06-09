@@ -117,8 +117,6 @@ class SnakeGame:
 			else:
 				return (True, 0, score, other_score)
 
-
-
 		# If snake runs into the other snake
 		if snake[0] in other_snake[1:]:
 			score = state[3][player-1] - 500
@@ -138,7 +136,7 @@ class SnakeGame:
 		win.addstr(0, 2, ' P1 score: ' + str(state[3][0]) + '')
 		#win.timeout(150 - (len(agent_one_snake)/5 + len(agent_one_snake)/10)%120)
 		win.addstr(self.board_size[0]-1, 2, ' P2 score: ' + str(state[3][1]) + ' ')
-		#win.timeout(150)
+		win.timeout(15)
 
 		agent_one_snake = state[1][0]
 		agent_two_snake = state[1][1]

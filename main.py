@@ -4,14 +4,15 @@ from manhattan_agent import manhattan_agent
 from minimax_agent import *
 import curses
 
+
 def play_snake_game(agent_one, agent_two):
 
 	player1 = 0
 	player2 = 0
 
-	for i in range(100):
+	for i in range(1):
 		states = []
-		game = SnakeGame(board_size = (20, 20))
+		game = SnakeGame(board_size = (20, 40))
 		state = game.start_state()
 		states.append(state)
 
@@ -49,8 +50,8 @@ def play_snake_game(agent_one, agent_two):
 			print("Agent 2 score: " + str(result[3]))
 		else:
 			print("Agent 1 score: " + str(result[3]))
-			print("Agent 2 score: " + str(result[2]))'''
-
+			print("Agent 2 score: " + str(result[2]))
+		'''
 
 	print("Player 1 wins: " + str(player1))
 	print("Player 2 wins: " + str(player2))
