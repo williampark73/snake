@@ -6,12 +6,13 @@ import math
 import curses
 import collections
 
-numIters = 0
+numIters = 1
 
 explorationProb = 0.2
-weights = [0, 0]
+numFeatures = 2
+weights = [0 for _ in range(numFeatures)]
 discount = 1
-stepSize = 0.001
+stepSize = 1e-3/float(numIters)
 
 def get_valid(current_dir, actions):
 	if current_dir == KEY_RIGHT:
@@ -29,7 +30,7 @@ def evaluation(game, state, action):
 		score = 0
 
 		phi = featureExtractor(game, state, action)
-		for i in range(2):
+		for i in range(numFeatures):
 			score += weights[i] * phi[i][0]
 		return score
 
@@ -51,15 +52,16 @@ def featureExtractor(game, state, action):
 
 	snake = nextState[1][1]
 	food = state[4]
+	other_snake = nextState[1][0]
 
 	features = []
-	x_dist = snake[0][0] - food[0]
-	y_dist = snake[0][1] - food[1]
-	score = state[3][player - 1]
+	x_dist = abs(snake[0][0] - food[0])
+	y_dist = abs(snake[0][1] - food[1])
+	score = state[3][1]
 
 	features.append((x_dist, 1.))
 	features.append((y_dist, 1.))
-	features.append((score, 1.))
+	#features.append((score, 1.))
 
 	return features
 
@@ -71,13 +73,14 @@ def incorporateFeedback(game, state, action, reward, newState):
 	phi = featureExtractor(game, state, action)
 
 	pred = 0
-
-	for i in range(2):
+	for i in range(numFeatures):
 		pred += weights[i] * phi[i][0]
 
 	'''try:
-		current_dir = newState[2][newState[5]-1]
-		actions = get_valid(current_dir, game.actions())
+	'''
+	current_dir = newState[2][newState[5]-1]
+	actions = get_valid(current_dir, game.actions())
+	'''
 <<<<<<< HEAD
 		v_opt = max(evaluation(newState, new_action) for new_action in get_QL_action(newState, actions))
 =======
@@ -86,13 +89,28 @@ def incorporateFeedback(game, state, action, reward, newState):
 	except:
 		v_opt = 0.'''
 
-	target = reward #+ discount * v_opt
+	#v_opt = evaluation(game, newState, get_QL_Action(game, newState, actions))
+	v_opt = 0
+	'''
+	v_opt = -float('inf')
+	for new_action in actions:
+		total = 0
+		for i in range(numFeatures):
+			total += weights[i] * phi[i][0]
+		if total > v_opt:
+			v_opt = total
+	'''
+	target = reward + discount * v_opt
 
-	for i in range(2):
-		weights[i] = weights[i] - stepSize * (pred - target) * phi[i][0]
+	for i in range(numFeatures):
+		weights[i] -= stepSize * (pred - target) * phi[i][0]
 
 
-def train(num_trials=100, max_iter=1000):
+def train(num_trials=100, max_iter=100):
+
+	player1 = 0
+	player2 = 0
+
 	for trial in range(num_trials):
 
 		game = SnakeGame(board_size = (20, 25))
@@ -116,9 +134,10 @@ def train(num_trials=100, max_iter=1000):
 
 			snake = succ[1][1]
 			food = state[4]
-
-			reward = (snake[0][0] - food[0])**2 + (snake[0][1] - food[1])**2
-
+			
+			reward = succ[3][1] - state[3][1]
+				#reward = -(abs(snake[0][0] - food[0]) + abs(snake[0][1] - food[1]))
+			#reward = 10
 			state[0].addstr(0, 10, ' Weights: ' + str(weights) + '')
 
 			incorporateFeedback(game, state, action, reward, succ)
@@ -129,6 +148,17 @@ def train(num_trials=100, max_iter=1000):
 				break
 			game.print_board(state)
 			'''
+		result = game.is_end(state)
+		if result[1] == 0:
+			print("Tie game")
+		elif result[1] == 1:
+			#print("Agent 2 wins")
+			player2 += 1
+		else:
+			#print("Agent 1 wins")
+			player1 +=1
 
+	print("Minimax wins: " + str(player1))
+	print("DQN wins: " + str(player2))
 #play_snake_game(minimax_agent_first_index, minimax_agent_second_index)
 train()
