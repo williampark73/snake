@@ -8,7 +8,7 @@ import curses
 def play_snake_game(agent_one, agent_two):
 
 	states = []
-	game = SnakeGame(board_size = (20, 60))
+	game = SnakeGame(board_size = (20, 40))
 	state = game.start_state()
 	states.append(state)
 

@@ -105,7 +105,7 @@ class SnakeGame:
 			else:
 				return (True, 0, score, other_score)
 
-		
+
 		# If snake runs into itself
 		if snake[0] in snake[1:]:
 			score = state[3][player-1] - 1000
@@ -149,4 +149,4 @@ class SnakeGame:
 		win.addch(agent_two_snake[0][0], agent_two_snake[0][1], '#')
 
 
-		win.addstr(0, 45, ' Time : ' + str(int(time.time() - start_time)) + ' ')
+		win.addstr(0, self.board_size[1] - 12, ' Time : ' + str(int(time.time() - start_time)) + ' ')
