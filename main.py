@@ -4,6 +4,7 @@ from manhattan_agent import manhattan_agent
 from minimax_agent import *
 import curses
 
+
 def play_snake_game(agent_one, agent_two):
 
 	states = []
@@ -47,4 +48,14 @@ def play_snake_game(agent_one, agent_two):
 	for s in states:
 		print(s)
 	'''
+'''
+win1 = 0
+for i in range(100):
+	win1 += play_snake_game(manhattan_agent, minimax_agent_second_index)
+	print(i)
+
+print(win1)
+print(win1/500)
+'''
 play_snake_game(minimax_agent_first_index, minimax_agent_second_index)
+
