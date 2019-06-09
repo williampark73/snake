@@ -6,45 +6,53 @@ import curses
 
 def play_snake_game(agent_one, agent_two):
 
-	states = []
-	game = SnakeGame(board_size = (20, 40))
-	state = game.start_state()
-	states.append(state)
+	player1 = 0
+	player2 = 0
 
-	game.print_board(state)
-
-	while True:
-		action = agent_one(game, state)
-		state = game.successor(state, action, True)
+	for i in range(100):
+		states = []
+		game = SnakeGame(board_size = (20, 20))
+		state = game.start_state()
 		states.append(state)
 
-		if game.is_end(state)[0] == True:
-			break
 		game.print_board(state)
+		while True:
+			action = agent_one(game, state)
+			state = game.successor(state, action, True)
+			states.append(state)
 
-		action = agent_two(game, state)
-		state = game.successor(state, action, True)
-		states.append(state)
-		if game.is_end(state)[0] == True:
-			break
-		game.print_board(state)
+			if game.is_end(state)[0] == True:
+				break
+			game.print_board(state)
 
-	result = game.is_end(state)
-	curses.endwin()
-	if result[1] == 0:
-		print("Tie game")
-	elif result[1] == 1:
-		print("Agent 2 wins")
-	else:
-		print("Agent 1 wins")
-	if state[5] == 1:
-		print("Agent 1 score: " + str(result[2]))
-		print("Agent 2 score: " + str(result[3]))
-	else:
-		print("Agent 1 score: " + str(result[3]))
-		print("Agent 2 score: " + str(result[2]))
-	'''
-	for s in states:
-		print(s)
-	'''
+			action = agent_two(game, state)
+			state = game.successor(state, action, True)
+			states.append(state)
+			if game.is_end(state)[0] == True:
+				break
+			game.print_board(state)
+
+		result = game.is_end(state)
+		curses.endwin()
+
+		if result[1] == 0:
+			print("Tie game")
+		elif result[1] == 1:
+			#print("Agent 2 wins")
+			player2 += 1
+		else:
+			#print("Agent 1 wins")
+			player1 +=1
+		'''
+		if state[5] == 1:
+			print("Agent 1 score: " + str(result[2]))
+			print("Agent 2 score: " + str(result[3]))
+		else:
+			print("Agent 1 score: " + str(result[3]))
+			print("Agent 2 score: " + str(result[2]))'''
+
+
+	print("Player 1 wins: " + str(player1))
+	print("Player 2 wins: " + str(player2))
+
 play_snake_game(minimax_agent_first_index, minimax_agent_second_index)
