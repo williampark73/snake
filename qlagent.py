@@ -7,7 +7,7 @@ import collections
 	
 numIters = 0
 explorationProb = 0.3
-weights = [0, 0]
+weights = [0, 0, 0]
 discount = 1
 stepSize = 0.1
 
@@ -40,7 +40,7 @@ def evaluation(state, action):
 		'''
 		score = 0
 		phi = featureExtractor(state, action)
-		for i in range(2):
+		for i in range(3):
 			score += weights[i] * phi[i][1]
 		return score
 
@@ -56,14 +56,17 @@ def get_QL_Action(state, actions):
 def featureExtractor(state, action):
 	player = state[5]
 	snake = state[1][player-1]
+
 	food = state[4]
 
 	features = []
 	x_dist = snake[0][0] - food[0]
 	y_dist = snake[0][1] - food[1]
+	score = state[3][player - 1]
 
-	features.append((x_dist, 1))
-	features.append((y_dist, 1))
+	features.append((x_dist, 1.))
+	features.append((y_dist, 1.))
+	features.append((score, 1.))
 
 	return features
 
@@ -75,24 +78,24 @@ def incorporateFeedback(state, action, reward, newState):
 	phi = featureExtractor(state, action)
 
 	pred = 0
-	for i in range(2):
+	for i in range(3):
 		pred += weights[i] * phi[i][1]
 
 	try:
 		current_dir = newState[2][newState[5]-1]
 		actions = get_valid(current_dir, game.actions())
-		v_opt = max(evalQ(newState, new_action) for new_action in get_QL_action(newState, actions))
+		v_opt = max(evaluation(newState, new_action) for new_action in get_QL_action(newState, actions))
 	except:
 		v_opt = 0.
 
 	target = reward + discount * v_opt
 
-	for i in range(2):
+	for i in range(3):
 		weights[i] = weights[i] - stepSize * (pred - target) * phi[i][1]
 
 
 def train(num_trials=100, max_iter=1000):
-	for trial in xrange(num_trials):
+	for trial in range(num_trials):
 
 		game = SnakeGame(board_size = (20, 40))
 		state = game.start_state()
@@ -113,11 +116,13 @@ def train(num_trials=100, max_iter=1000):
 
 			succ = game.successor(state, action)
 
-			reward = succ[3][1] - state[3][1]
+			reward = 10
 
 			state[0].addstr(0, 2, ' Weights: ' + str(weights) + '')
 
 			incorporateFeedback(state, action, reward, succ)
+
+			state = succ
 			'''
 			if game.is_end(state)[0] == True:
 				break

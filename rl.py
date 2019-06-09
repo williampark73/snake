@@ -1,3 +1,4 @@
+
 class RLAlgorithm(object):
 
     def __str__(self):
@@ -27,9 +28,11 @@ class RLAlgorithm(object):
     def addRolloutFeedback(self, rewards, rollout_idx):
         raise NotImplementedError("addRolloutFeedback not implemented")
 
+
+
     # def train(self):
     #     raise NotImplementedError("train not implemented")
-
+    '''
     def train(self, opponents, grid_size, num_trials=100, max_iter=1000, verbose=False):
         print "RL training"
         totalRewards = []  # The rewards we get on each trial
@@ -73,3 +76,5 @@ class RLAlgorithm(object):
         progressBar(num_trials, num_trials)
         print "Average reward:", sum(totalRewards)/num_trials
         return totalRewards
+
+    '''
