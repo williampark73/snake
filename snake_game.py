@@ -104,7 +104,7 @@ class SnakeGame:
 				return (True, player, score, other_score)
 			else:
 				return (True, 0, score, other_score)
-		'''
+
 		# If snake runs into itself
 		if snake[0] in snake[1:]:
 			score = state[3][player-1] - 1000
@@ -115,7 +115,7 @@ class SnakeGame:
 				return (True, player, score, other_score)
 			else:
 				return (True, 0, score, other_score)
-		'''
+		
 		# If snake runs into the other snake
 		if snake[0] in other_snake[1:]:
 			score = state[3][player-1] - 500

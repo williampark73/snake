@@ -12,13 +12,13 @@ def play_snake_game(agent_one, agent_two):
 
 	while True:
 		action = agent_one(game, state)
-		state = game.successor(state, action)
+		state = game.successor(state, action, True)
 		if game.is_end(state)[0] == True:
 			break
-		game.print_board(state)
+		#game.print_board(state)
 
 		action = agent_two(game, state)
-		state = game.successor(state, action)
+		state = game.successor(state, action, True)
 		if game.is_end(state)[0] == True:
 			break
 		game.print_board(state)
