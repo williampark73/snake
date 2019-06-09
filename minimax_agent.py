@@ -1,5 +1,5 @@
 import random
-from curses import KEY_RIGHT, KEY_UP
+from curses import *
 
 def minimax_agent_first_index(game, state):
 	return minimax_agent(game, state, 1, 5)
@@ -10,16 +10,20 @@ def minimax_agent_second_index(game, state):
 
 
 def minimax_agent(game, state, agent_index, depth):
-	#win = state[0]
+	win = state[0]
 
 	actions = game.actions()
-	save_state = state
+
+	current_dir = state[2][state[5]-1]
 	scores = [minimax_value(game, game.successor(state, action, False), agent_index, 3 - agent_index, depth) for action in actions]
 	best_score = max(scores)
 	best_indices = [index for index in range(len(scores)) if scores[index] == best_score]
 	chosen_index = random.choice(best_indices)
-	state = save_state
-	return KEY_RIGHT
+
+	chosen_index = 2
+
+
+	return random.choice(actions)
 
 def minimax_value(game, state, maximizing_agent, agent_index, depth):
 	if game.is_end(state)[0]:
@@ -30,6 +34,7 @@ def minimax_value(game, state, maximizing_agent, agent_index, depth):
 			return float('inf')
 		else:
 			return -float('inf')
+
 
 	#state[0].timeout(150)
 	if depth == 0:

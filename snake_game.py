@@ -25,8 +25,8 @@ class SnakeGame:
 		agent_one_score = 100
 		agent_two_score = 100
 
-		agent_one_snake = [[4,10], [4,9], [4, 8]]
-		agent_two_snake = [[15, 8], [15, 9], [15, 10]]
+		agent_one_snake = ([4,10], [4,9], [4, 8])
+		agent_two_snake = ([15, 8], [15, 9], [15, 10])
 
 		food = [randint(1, self.board_size[0]-2), randint(1, self.board_size[1]-2)]
 
@@ -48,12 +48,8 @@ class SnakeGame:
 		new_state = list(state)
 		key = action
 		player = new_state[5]
-		snake = new_state[1][player-1]
+		snake = list(new_state[1][player-1])
 		snake.insert(0, [snake[0][0] + (key == KEY_DOWN and 1) + (key == KEY_UP and -1), snake[0][1] + (key == KEY_LEFT and -1) + (key == KEY_RIGHT and 1)])
-
-		list_snakes = list(new_state[1])
-		list_snakes[player-1] = snake
-		new_state[1] = tuple(list_snakes)
 
 		list_keys = list(new_state[2])
 		list_keys[player-1] = action
@@ -80,6 +76,10 @@ class SnakeGame:
 
 		new_state[3] = tuple(list_scores)
 
+		list_snakes = list(new_state[1])
+		list_snakes[player-1] = tuple(snake)
+		new_state[1] = tuple(list_snakes)
+
 		if player == 1:
 			new_state[5] = 2
 		else:
@@ -105,6 +105,7 @@ class SnakeGame:
 			else:
 				return (True, 0, score, other_score)
 
+		'''
 		# If snake runs into itself
 		if snake[0] in snake[1:]:
 			score = state[3][player-1] - 1000
@@ -115,7 +116,9 @@ class SnakeGame:
 				return (True, player, score, other_score)
 			else:
 				return (True, 0, score, other_score)
-		
+
+		'''
+
 		# If snake runs into the other snake
 		if snake[0] in other_snake[1:]:
 			score = state[3][player-1] - 500
