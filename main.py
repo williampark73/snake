@@ -6,19 +6,25 @@ import curses
 
 def play_snake_game(agent_one, agent_two):
 
+	states = []
 	game = SnakeGame(board_size = (20, 60))
 	state = game.start_state()
+	states.append(state)
+
 	game.print_board(state)
 
 	while True:
 		action = agent_one(game, state)
-		state = game.successor(state, action)
+		state = game.successor(state, action, True)
+		states.append(state)
+
 		if game.is_end(state)[0] == True:
 			break
 		game.print_board(state)
 
 		action = agent_two(game, state)
-		state = game.successor(state, action)
+		state = game.successor(state, action, True)
+		states.append(state)
 		if game.is_end(state)[0] == True:
 			break
 		game.print_board(state)
@@ -38,5 +44,7 @@ def play_snake_game(agent_one, agent_two):
 		print("Agent 1 score: " + str(result[3]))
 		print("Agent 2 score: " + str(result[2]))
 
+	for s in states:
+		print(s)
 
 play_snake_game(human_agent, minimax_agent_second_index)
