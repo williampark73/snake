@@ -43,8 +43,8 @@ def play_snake_game(agent_one, agent_two):
 	else:
 		print("Agent 1 score: " + str(result[3]))
 		print("Agent 2 score: " + str(result[2]))
-
+	'''
 	for s in states:
 		print(s)
-
-play_snake_game(human_agent, minimax_agent_second_index)
+	'''
+play_snake_game(minimax_agent_first_index, minimax_agent_second_index)

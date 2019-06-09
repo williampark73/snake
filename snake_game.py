@@ -45,6 +45,7 @@ class SnakeGame:
 
 	# We will assume the action here is legal
 	def successor(self, state, action, updateWindow = True):
+		                                     # [1] If it does not eat the food, length decreases
 		new_state = list(state)
 		key = action
 		player = new_state[5]
@@ -62,13 +63,12 @@ class SnakeGame:
 		if snake[0] == food:                                            # When snake eats the food
 			food = []
 			list_scores[player-1] += 100
-
 			while food == []:
 				food = [randint(1, self.board_size[0]-2), randint(1, self.board_size[1]-2)]                 # Calculating next food's coordinates
 				if food in snake: food = []
 			new_state[4] = food
 		else:
-			last = snake.pop()                                          # [1] If it does not eat the food, length decreases
+			last = snake.pop()
 			list_scores[player-1] -= 1
 			if updateWindow == True:
 				win = new_state[0]
@@ -138,7 +138,7 @@ class SnakeGame:
 		win.addstr(0, 2, ' P1 score: ' + str(state[3][0]) + '')
 		#win.timeout(150 - (len(agent_one_snake)/5 + len(agent_one_snake)/10)%120)
 		win.addstr(self.board_size[0]-1, 2, ' P2 score: ' + str(state[3][1]) + ' ')
-		win.timeout(150)
+		win.timeout(1)
 
 		agent_one_snake = state[1][0]
 		agent_two_snake = state[1][1]
