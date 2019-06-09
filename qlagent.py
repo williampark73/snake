@@ -2,14 +2,15 @@ from snake_game import SnakeGame
 from human_agent import human_agent
 from manhattan_agent import manhattan_agent
 from minimax_agent import *
+import math
 import curses
 import collections
-	
+
 numIters = 0
-explorationProb = 0.3
+explorationProb = 0.2
 weights = [0, 0]
 discount = 1
-stepSize = 0.1
+stepSize = 0.001
 
 def get_valid(current_dir, actions):
 	if current_dir == KEY_RIGHT:
@@ -23,39 +24,27 @@ def get_valid(current_dir, actions):
 	actions.remove(remove)
 	return actions
 
-def evaluation(state, action):
-		"""
-		Evaluate Q-function for a given (`state`, `action`)
-		"""
-		'''
+def evaluation(game, state, action):
 		score = 0
-		for f, v in self.featureExtractor.dictExtractor(state, action):
-			score += self.weights[f] * v
-		return score
-		'''
-		'''
-		food = state[4]
-		snake = state[1][state[5]-1]
-		return 100*state[3][state[5]-1] -((snake[0][0] - food[0])**2 + (snake[0][1] - food[1])**2)
-		'''
-		score = 0
-		phi = featureExtractor(state, action)
+		phi = featureExtractor(game, state, action)
 		for i in range(2):
-			score += weights[i] * phi[i][1]
+			score += weights[i] * phi[i][0]
 		return score
 
-def get_QL_Action(state, actions):
+def get_QL_Action(game, state, actions):
 	global numIters
 	numIters += 1
 
 	if random.random() < explorationProb:
 		return random.choice(actions)
 	else:
-		return max((evaluation(state, action), action) for action in actions)[1]
+		return max((evaluation(game, state, action), action) for action in actions)[1]
 
-def featureExtractor(state, action):
-	player = state[5]
-	snake = state[1][player-1]
+def featureExtractor(game, state, action):
+
+	nextState = game.successor(state, action, False)
+
+	snake = nextState[1][1]
 	food = state[4]
 
 	features = []
@@ -68,33 +57,33 @@ def featureExtractor(state, action):
 	return features
 
 
-def incorporateFeedback(state, action, reward, newState):
+def incorporateFeedback(game, state, action, reward, newState):
 	if newState is None:
 		return
-	
-	phi = featureExtractor(state, action)
+
+	phi = featureExtractor(game, state, action)
 
 	pred = 0
 	for i in range(2):
-		pred += weights[i] * phi[i][1]
+		pred += weights[i] * phi[i][0]
 
-	try:
+	'''try:
 		current_dir = newState[2][newState[5]-1]
 		actions = get_valid(current_dir, game.actions())
-		v_opt = max(evalQ(newState, new_action) for new_action in get_QL_action(newState, actions))
+		v_opt = evaluation(game, newState, get_QL_action(game, newState, actions))
 	except:
-		v_opt = 0.
+		v_opt = 0.'''
 
-	target = reward + discount * v_opt
+	target = reward #+ discount * v_opt
 
 	for i in range(2):
-		weights[i] = weights[i] - stepSize * (pred - target) * phi[i][1]
+		weights[i] = weights[i] - stepSize * (pred - target) * phi[i][0]
 
 
 def train(num_trials=100, max_iter=1000):
-	for trial in xrange(num_trials):
+	for trial in range(num_trials):
 
-		game = SnakeGame(board_size = (20, 40))
+		game = SnakeGame(board_size = (20, 25))
 		state = game.start_state()
 		game.print_board(state)
 
@@ -109,15 +98,20 @@ def train(num_trials=100, max_iter=1000):
 			current_dir = state[2][state[5]-1]
 			actions = get_valid(current_dir, game.actions())
 
-			action = get_QL_Action(state, actions)
+			action = get_QL_Action(game, state, actions)
 
 			succ = game.successor(state, action)
 
-			reward = succ[3][1] - state[3][1]
+			snake = succ[1][1]
+			food = state[4]
 
-			state[0].addstr(0, 2, ' Weights: ' + str(weights) + '')
+			reward = (snake[0][0] - food[0])**2 + (snake[0][1] - food[1])**2
 
-			incorporateFeedback(state, action, reward, succ)
+			state[0].addstr(0, 10, ' Weights: ' + str(weights) + '')
+
+			incorporateFeedback(game, state, action, reward, succ)
+
+			state = succ
 			'''
 			if game.is_end(state)[0] == True:
 				break

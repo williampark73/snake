@@ -26,7 +26,7 @@ class SnakeGame:
 		agent_two_score = 100
 
 		agent_one_snake = ([4,10], [4,9], [4, 8])
-		agent_two_snake = ([15, 8], [15, 9], [15, 10])
+		agent_two_snake = ([7, 8], [7, 9], [7, 10])
 
 		food = [randint(1, self.board_size[0]-2), randint(1, self.board_size[1]-2)]
 

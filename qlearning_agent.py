@@ -1,7 +1,6 @@
 import random, math, pickle, time
 import interface, utils
 import numpy as np
-from agent import Agent
 from rl import RLAlgorithm
 from collections import defaultdict
 from utils import progressBar
@@ -69,7 +68,7 @@ class QLearningAlgorithm(RLAlgorithm):
     def incorporateFeedback(self, state, action, reward, newState):
         if newState is None:
             return
-        
+
         phi = self.featureExtractor.dictExtractor(state, action)
         pred = sum(self.weights[k] * v for k,v in phi)
         try:
