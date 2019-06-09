@@ -10,15 +10,15 @@ def minimax_agent_second_index(game, state):
 
 
 def minimax_agent(game, state, agent_index, depth):
-	win = state[0]
-	win.getch()
+	#win = state[0]
 
 	actions = game.actions()
-	scores = [minimax_value(game, game.successor(state, action), agent_index, 3 - agent_index, depth) for action in actions]
-	best_score = max(scores)
-	best_indices = [index for index in range(len(scores)) if scores[index] == best_score]
-	chosen_index = random.choice(best_indices)
-	return actions[chosen_index]
+	#scores = [minimax_value(game, game.successor(state, action, False), agent_index, 3 - agent_index, depth) for action in actions]
+	#best_score = max(scores)
+	#best_indices = [index for index in range(len(scores)) if scores[index] == best_score]
+	#chosen_index = random.choice(best_indices)
+	#return actions[chosen_index]
+	return random.choice(actions)
 
 def minimax_value(game, state, maximizing_agent, agent_index, depth):
 	if game.is_end(state)[0]:
@@ -39,10 +39,8 @@ def minimax_value(game, state, maximizing_agent, agent_index, depth):
 
 	actions = game.actions()
 	if state[5] == maximizing_agent:
-		values = [minimax_value(game, game.successor(state, action), maximizing_agent, 3 - agent_index, depth - 1) for action in actions]
+		values = [minimax_value(game, game.successor(state, action, False), maximizing_agent, 3 - agent_index, depth - 1) for action in actions]
 		return max(values)
 	else:
-		values = [minimax_value(game, game.successor(state, action), maximizing_agent, 3 - agent_index, depth - 1) for action in actions]
+		values = [minimax_value(game, game.successor(state, action, False), maximizing_agent, 3 - agent_index, depth - 1) for action in actions]
 		return min(values)
-
-

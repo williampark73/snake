@@ -2,6 +2,7 @@ from snake_game import SnakeGame
 from human_agent import human_agent
 from manhattan_agent import manhattan_agent
 from minimax_agent import minimax_agent_second_index
+import curses
 
 def play_snake_game(agent_one, agent_two):
 
@@ -20,10 +21,10 @@ def play_snake_game(agent_one, agent_two):
 		state = game.successor(state, action)
 		if game.is_end(state)[0] == True:
 			break
-		else:
-			game.print_board(state)
+		game.print_board(state)
 
 	result = game.is_end(state)
+	curses.endwin()
 	if result[1] == 0:
 		print("Tie game")
 	elif result[1] == 1:
@@ -37,5 +38,5 @@ def play_snake_game(agent_one, agent_two):
 		print("Agent 1 score: " + str(result[3]))
 		print("Agent 2 score: " + str(result[2]))
 
-play_snake_game(human_agent, minimax_agent_second_index)
 
+play_snake_game(human_agent, minimax_agent_second_index)

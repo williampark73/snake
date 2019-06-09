@@ -44,7 +44,7 @@ class SnakeGame:
 		return [KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN]
 
 	# We will assume the action here is legal
-	def successor(self, state, action):
+	def successor(self, state, action, updateWindow = True):
 		new_state = list(state)
 		key = action
 		player = new_state[5]
@@ -62,7 +62,6 @@ class SnakeGame:
 		list_scores = list(new_state[3])
 
 		food = new_state[4]
-		win = new_state[0]
 
 		if snake[0] == food:                                            # When snake eats the food
 			food = []
@@ -75,7 +74,9 @@ class SnakeGame:
 		else:
 			last = snake.pop()                                          # [1] If it does not eat the food, length decreases
 			list_scores[player-1] -= 1
-			win.addch(last[0], last[1], ' ')
+			if updateWindow == True:
+				win = new_state[0]
+				win.addch(last[0], last[1], ' ')
 
 		new_state[3] = tuple(list_scores)
 
@@ -95,7 +96,6 @@ class SnakeGame:
 
 		# If snake runs into a boundary
 		if snake[0][0] == 0 or snake[0][0] == self.board_size[0] - 1 or snake[0][1] == 0 or snake[0][1] == self.board_size[1] - 1:
-			curses.endwin()
 			score = state[3][player-1] - 1000
 			other_score = state[3][other_player-1]
 			if score > other_score:
@@ -107,7 +107,6 @@ class SnakeGame:
 		'''
 		# If snake runs into itself
 		if snake[0] in snake[1:]:
-			curses.endwin()
 			score = state[3][player-1] - 1000
 			other_score = state[3][other_player-1]
 			if score > other_score:
@@ -119,7 +118,6 @@ class SnakeGame:
 		'''
 		# If snake runs into the other snake
 		if snake[0] in other_snake[1:]:
-			curses.endwin()
 			score = state[3][player-1] - 500
 			other_score = state[3][other_player-1]
 			if score > other_score:
