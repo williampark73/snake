@@ -128,6 +128,7 @@ def incorporateFeedback(game, state, action, reward, newState):
 			v_opt = total
 	
 	target = reward + discount * v_opt
+	state[0].addstr(31, 10, ' Diff: ' + str(pred - target) + '    ')
 
 	for i in range(numFeatures):
 		weights[i] -= stepSize * (pred - target) * phi[i]
@@ -165,16 +166,27 @@ def train(num_trials=100, test_runs=10):
 			food = state[4]
 
 			reward = succ[3][1] - state[3][1]
+			result = game.is_end(succ)
+			if result[0] == True:
+				reward = result[2] - state[3][1]
 				#reward = -(abs(snake[0][0] - food[0]) + abs(snake[0][1] - food[1]))
+				state[0].addstr(35, 10, ' Reward: ' + str(reward) + '     ')
 			#reward = 10
-			#state[0].addstr(0, 10, ' Weights: ' + str(weights) + '')
+			state[0].addstr(28, 10, ' Reward: ' + str(reward) + '     ')
+			state[0].addstr(29, 10, ' ScoreNow: ' + str(succ[3][1]) + '     ')
+			state[0].addstr(30, 10, ' ScorePrev: ' + str(state[3][1]) + '    ')
 
 			incorporateFeedback(game, state, action, reward, succ)
 
+			game.print_board(state)
 			state = succ
 			if game.is_end(state)[0] == True:
+				state[0].timeout(500)
+				x = 0
+				while True:
+					x += 1
 				break
-			game.print_board(state)
+
 
 
 		global explorationProb
