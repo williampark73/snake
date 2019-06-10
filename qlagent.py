@@ -12,7 +12,7 @@ explorationProb = 0.5
 numFeatures = 6
 weights = [0 for _ in range(numFeatures)]
 discount = 1
-stepSize = 1e-3/float(numIters)
+stepSize = 1e-1/float(numIters)
 
 def get_valid(current_dir, actions):
 	if current_dir == KEY_RIGHT:
@@ -117,16 +117,16 @@ def incorporateFeedback(game, state, action, reward, newState):
 		v_opt = 0.'''
 
 	#v_opt = evaluation(game, newState, get_QL_Action(game, newState, actions))
-	v_opt = 0
-	'''
+	#v_opt = 0
+	
 	v_opt = -float('inf')
 	for new_action in actions:
 		total = 0
 		for i in range(numFeatures):
-			total += weights[i] * phi[i][0]
+			total += weights[i] * phi[i]
 		if total > v_opt:
 			v_opt = total
-	'''
+	
 	target = reward + discount * v_opt
 
 	for i in range(numFeatures):
@@ -235,4 +235,5 @@ def train(num_trials=100, test_runs=10):
 	print("DQN wins: " + str(player2))
 	'''
 #play_snake_game(minimax_agent_first_index, minimax_agent_second_index)
+'''
 train()
