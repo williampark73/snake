@@ -106,7 +106,7 @@ def incorporateFeedback(game, state, action, reward, newState):
 		weights[i] -= stepSize * (pred - target) * phi[i][0]
 
 
-def train(num_trials=100, max_iter=100):
+def train(num_trials=100, max_iter=1000):
 
 	player1 = 0
 	player2 = 0
@@ -147,7 +147,9 @@ def train(num_trials=100, max_iter=100):
 			if game.is_end(state)[0] == True:
 				break
 			game.print_board(state)
+		
 			'''
+		'''
 		result = game.is_end(state)
 		if result[1] == 0:
 			print("Tie game")
@@ -157,8 +159,9 @@ def train(num_trials=100, max_iter=100):
 		else:
 			#print("Agent 1 wins")
 			player1 +=1
-
+	
 	print("Minimax wins: " + str(player1))
 	print("DQN wins: " + str(player2))
+	'''
 #play_snake_game(minimax_agent_first_index, minimax_agent_second_index)
 train()

@@ -10,7 +10,7 @@ def play_snake_game(agent_one, agent_two):
 	player1 = 0
 	player2 = 0
 
-	for i in range(1):
+	for i in range(100):
 		states = []
 		game = SnakeGame(board_size = (20, 40))
 		state = game.start_state()

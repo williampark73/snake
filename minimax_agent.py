@@ -5,11 +5,11 @@ from random import randint
 depth = 5
 
 def minimax_agent_first_index(game, state):
-	return minimax_agent(game, state, 1, depth)
+	return minimax_agent(game, state, 1, 3)
 
 
 def minimax_agent_second_index(game, state):
-	return minimax_agent(game, state, 2, depth)
+	return minimax_agent(game, state, 2, 5)
 
 def get_valid(current_dir, actions):
 	if current_dir == KEY_RIGHT:
