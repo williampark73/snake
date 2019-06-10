@@ -12,7 +12,7 @@ class SnakeGame:
 
 	def start_state(self):
 		curses.initscr()
-		win = curses.newwin(self.board_size[0], self.board_size[1], 0, 0)
+		win = curses.newwin(self.board_size[0] + 20, self.board_size[1] + 30, 0, 0)
 		win.keypad(1)
 		curses.noecho()
 		curses.curs_set(0)
@@ -136,7 +136,7 @@ class SnakeGame:
 		win.addstr(0, 2, ' P1 score: ' + str(state[3][0]) + '')
 		#win.timeout(150 - (len(agent_one_snake)/5 + len(agent_one_snake)/10)%120)
 		win.addstr(self.board_size[0]-1, 2, ' P2 score: ' + str(state[3][1]) + ' ')
-		win.timeout(1)
+		win.timeout(5)
 
 		agent_one_snake = state[1][0]
 		agent_two_snake = state[1][1]
