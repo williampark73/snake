@@ -9,10 +9,11 @@ import collections
 numIters = 1
 
 explorationProb = 0.5
-numFeatures = 6
+numFeatures = 12
 weights = [0 for _ in range(numFeatures)]
+
 discount = 1
-stepSize = 1e-3/float(numIters)
+stepSize = 4e-3
 
 def get_valid(current_dir, actions):
 	if current_dir == KEY_RIGHT:
@@ -45,15 +46,40 @@ def get_QL_Action(game, state, actions):
 
 def isInBounds(game, loc, snake, other_snake):
 	# If snake runs into a boundary
-	if loc[0] == 0 or loc[0] == game.board_size[0] - 1 or loc[1] == 0 or loc[1] == game.board_size[1] - 1:
+	if loc[0] == 1 or loc[0] == game.board_size[0] - 1 or loc[1] == 1 or loc[1] == game.board_size[1] - 1:
 		return 1
 
 	# If snake runs into itself
-	if loc in snake[1:]:
+	
+	if loc in snake[2:]:
 		return 1
-
+	
 	# If snake runs into the other snake
 	if loc in other_snake[1:]:
+		return 1
+	return 0
+
+def isInSnake(game, loc, snake, other_snake):
+	# If snake runs into the other snake
+	if loc in other_snake[1:]:
+		return 1
+	return 0
+
+def isFood(state, snake):
+	food = state[4]
+	if snake[0] == food:
+		return 1
+	return 0
+
+def nearFood(state, snake):
+	food = state[4]
+	if abs(snake[0][0] - food[0]) + abs(snake[0][1] - food[1]) < 4:
+		return 1
+	return 0
+
+def nearerFood(state, snake):
+	food = state[4]
+	if abs(snake[0][0] - food[0]) + abs(snake[0][1] - food[1]) < 2:
 		return 1
 	return 0
 
@@ -82,6 +108,17 @@ def featureExtractor(game, state, action):
 	features.append(isInBounds(game, down, snake, other_snake))
 	features.append(isInBounds(game, right, snake, other_snake))
 	features.append(isInBounds(game, left, snake, other_snake))
+
+	features.append(isInSnake(game, up, snake, other_snake))
+	features.append(isInSnake(game, down, snake, other_snake))
+	features.append(isInSnake(game, right, snake, other_snake))
+	features.append(isInSnake(game, left, snake, other_snake))
+
+	features.append(isFood(state, snake))
+	features.append(nearFood(state, snake))
+
+	#features.append(nearerFood(state, snake))
+
 	#state[0].addstr(24, 2, ' Coords: ' + str([up, down, right, left]) + '')
 	#state[0].addstr(25, 2, ' Snake: ' + str(snake) + '')
 	#state[0].addstr(26, 2, ' Other Snake: ' + str(other_snake) + '')
@@ -117,8 +154,8 @@ def incorporateFeedback(game, state, action, reward, newState):
 		v_opt = 0.'''
 
 	#v_opt = evaluation(game, newState, get_QL_Action(game, newState, actions))
-	#v_opt = 0
-	
+	v_opt = 0
+	'''
 	v_opt = -float('inf')
 	for new_action in actions:
 		total = 0
@@ -126,7 +163,7 @@ def incorporateFeedback(game, state, action, reward, newState):
 			total += weights[i] * phi[i]
 		if total > v_opt:
 			v_opt = total
-	
+	'''
 	target = reward + discount * v_opt
 	state[0].addstr(31, 10, ' Diff: ' + str(pred - target) + '    ')
 
@@ -134,7 +171,8 @@ def incorporateFeedback(game, state, action, reward, newState):
 		weights[i] -= stepSize * (pred - target) * phi[i]
 
 
-def train(num_trials=100, test_runs=10):
+
+def train(num_trials=25, test_runs=100):
 
 	score1 = 0
 	score2 = 0
@@ -152,9 +190,17 @@ def train(num_trials=100, test_runs=10):
 			state = game.successor(state, action, True)
 
 			if game.is_end(state)[0] == True:
-				state[0].addstr(39, 10, ' Hi: ' + str(reward) + '     ')
+
+				reward = game.is_end(state)[2] - state[3][1]
+				incorporateFeedback(game, state, action, reward, succ)
+				'''state[0].addstr(2, 10, ' Reward: ' + str(reward) + '     ')
+				print(str(reward))
+				print(str(game.is_end(state)[2]))
+				print(str(state[3][1]))
+				game.print_board(state)
+				x = 0
 				while True:
-					x = 3
+					x += 1'''
 				break
 			game.print_board(state)
 
@@ -169,14 +215,10 @@ def train(num_trials=100, test_runs=10):
 			food = state[4]
 
 			reward = succ[3][1] - state[3][1]
+			#reward = 100*(succ[3][1]- state[3][1]) -((snake[0][0] - food[0])**2 + (snake[0][1] - food[1])**2)
+
 			result = game.is_end(succ)
-			if result[0] == True:
-				while True:
-					x = 3
-				reward = result[2] - state[3][1]
-				#reward = -(abs(snake[0][0] - food[0]) + abs(snake[0][1] - food[1]))
-				state[0].addstr(39, 10, ' Reward: ' + str(reward) + '     ')
-			#reward = 10
+
 			state[0].addstr(28, 10, ' Reward: ' + str(reward) + '     ')
 			state[0].addstr(29, 10, ' ScoreNow: ' + str(succ[3][1]) + '     ')
 			state[0].addstr(30, 10, ' ScorePrev: ' + str(state[3][1]) + '    ')
@@ -184,13 +226,11 @@ def train(num_trials=100, test_runs=10):
 			incorporateFeedback(game, state, action, reward, succ)
 
 			game.print_board(state)
-			
-			if game.is_end(succ)[0] == True:
-				game.print_board(state)
+			state = succ
 
+			if game.is_end(state)[0] == True:
 				break
 
-			state = succ
 
 		global explorationProb
 		explorationProb = explorationProb/2
@@ -206,7 +246,7 @@ def train(num_trials=100, test_runs=10):
 		while True:
 			action = minimax_agent_first_index(game, state)
 			state = game.successor(state, action, True)
-
+			state[0].timeout(150)
 			if game.is_end(state)[0] == True:
 				break
 			game.print_board(state)
@@ -222,7 +262,6 @@ def train(num_trials=100, test_runs=10):
 			food = state[4]
 
 			reward = succ[3][1] - state[3][1]
-
 			state = succ
 			if game.is_end(state)[0] == True:
 				break

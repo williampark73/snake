@@ -5,7 +5,7 @@ from random import randint
 depth = 5
 
 def minimax_agent_first_index(game, state):
-	return minimax_agent(game, state, 1, 3)
+	return minimax_agent(game, state, 1, 1)
 
 
 def minimax_agent_second_index(game, state):
