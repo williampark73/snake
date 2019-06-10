@@ -12,7 +12,7 @@ explorationProb = 0.5
 numFeatures = 6
 weights = [0 for _ in range(numFeatures)]
 discount = 1
-stepSize = 1e-1/float(numIters)
+stepSize = 1e-3/float(numIters)
 
 def get_valid(current_dir, actions):
 	if current_dir == KEY_RIGHT:
@@ -152,10 +152,13 @@ def train(num_trials=100, test_runs=10):
 			state = game.successor(state, action, True)
 
 			if game.is_end(state)[0] == True:
+				state[0].addstr(39, 10, ' Hi: ' + str(reward) + '     ')
+				while True:
+					x = 3
 				break
 			game.print_board(state)
 
-			current_dir = state[2][state[5]-1]
+			current_dir = state[2][1]
 			actions = get_valid(current_dir, game.actions())
 
 			action = get_QL_Action(game, state, actions)
@@ -168,9 +171,11 @@ def train(num_trials=100, test_runs=10):
 			reward = succ[3][1] - state[3][1]
 			result = game.is_end(succ)
 			if result[0] == True:
+				while True:
+					x = 3
 				reward = result[2] - state[3][1]
 				#reward = -(abs(snake[0][0] - food[0]) + abs(snake[0][1] - food[1]))
-				state[0].addstr(35, 10, ' Reward: ' + str(reward) + '     ')
+				state[0].addstr(39, 10, ' Reward: ' + str(reward) + '     ')
 			#reward = 10
 			state[0].addstr(28, 10, ' Reward: ' + str(reward) + '     ')
 			state[0].addstr(29, 10, ' ScoreNow: ' + str(succ[3][1]) + '     ')
@@ -179,15 +184,13 @@ def train(num_trials=100, test_runs=10):
 			incorporateFeedback(game, state, action, reward, succ)
 
 			game.print_board(state)
-			state = succ
-			if game.is_end(state)[0] == True:
-				state[0].timeout(500)
-				x = 0
-				while True:
-					x += 1
+			
+			if game.is_end(succ)[0] == True:
+				game.print_board(state)
+
 				break
 
-
+			state = succ
 
 		global explorationProb
 		explorationProb = explorationProb/2
