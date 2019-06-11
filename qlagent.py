@@ -13,7 +13,7 @@ numFeatures = 12
 weights = [0 for _ in range(numFeatures)]
 
 discount = 1
-stepSize = 4e-3
+stepSize = 1e-3
 
 def get_valid(current_dir, actions):
 	if current_dir == KEY_RIGHT:
@@ -119,13 +119,9 @@ def featureExtractor(game, state, action):
 
 	#features.append(nearerFood(state, snake))
 
-	#state[0].addstr(24, 2, ' Coords: ' + str([up, down, right, left]) + '')
-	#state[0].addstr(25, 2, ' Snake: ' + str(snake) + '')
-	#state[0].addstr(26, 2, ' Other Snake: ' + str(other_snake) + '')
+
 	state[0].addstr(23, 2, ' F: ' + str(features) + '')
 	state[0].addstr(24, 2, ' W: ' + str(weights) + '')
-
-	#features.append((score, 1.))
 
 	return features
 
@@ -140,18 +136,9 @@ def incorporateFeedback(game, state, action, reward, newState):
 	for i in range(numFeatures):
 		pred += weights[i] * phi[i]
 
-	'''try:
-	'''
 	current_dir = newState[2][newState[5]-1]
 	actions = get_valid(current_dir, game.actions())
-	'''
-<<<<<<< HEAD
-		v_opt = max(evaluation(newState, new_action) for new_action in get_QL_action(newState, actions))
-=======
-		v_opt = evaluation(game, newState, get_QL_action(game, newState, actions))
->>>>>>> 66bac6dd2e64a262dfaa19b987e2df48d0764d94
-	except:
-		v_opt = 0.'''
+
 
 	#v_opt = evaluation(game, newState, get_QL_Action(game, newState, actions))
 	v_opt = 0
@@ -172,7 +159,7 @@ def incorporateFeedback(game, state, action, reward, newState):
 
 
 
-def train(num_trials=25, test_runs=100):
+def train(num_trials=40):
 
 	score1 = 0
 	score2 = 0
@@ -193,14 +180,7 @@ def train(num_trials=25, test_runs=100):
 
 				reward = game.is_end(state)[2] - state[3][1]
 				incorporateFeedback(game, state, action, reward, succ)
-				'''state[0].addstr(2, 10, ' Reward: ' + str(reward) + '     ')
-				print(str(reward))
-				print(str(game.is_end(state)[2]))
-				print(str(state[3][1]))
-				game.print_board(state)
-				x = 0
-				while True:
-					x += 1'''
+
 				break
 			game.print_board(state)
 
@@ -236,58 +216,9 @@ def train(num_trials=25, test_runs=100):
 		explorationProb = explorationProb/2
 
 
-	explorationProb = 0
-	for trial in range(test_runs):
-		game = SnakeGame(board_size = (20, 25))
-		state = game.start_state()
-		game.print_board(state)
-
-
-		while True:
-			action = minimax_agent_first_index(game, state)
-			state = game.successor(state, action, True)
-			state[0].timeout(150)
-			if game.is_end(state)[0] == True:
-				break
-			game.print_board(state)
-
-			current_dir = state[2][state[5]-1]
-			actions = get_valid(current_dir, game.actions())
-
-			action = get_QL_Action(game, state, actions)
-
-			succ = game.successor(state, action)
-
-			snake = succ[1][1]
-			food = state[4]
-
-			reward = succ[3][1] - state[3][1]
-			state = succ
-			if game.is_end(state)[0] == True:
-				break
-			#game.print_board(state)
-
-		score1 += state[3][0]
-		score2 += state[3][1]
-
-		result = game.is_end(state)
-
-		if result[1] == 0:
-			print("Tie game")
-		elif result[1] == 1:
-			#print("Agent 2 wins")
-			player2 += 1
-		else:
-			#print("Agent 1 wins")
-			player1 +=1
-
 
 	curses.endwin()
-	print("Minimax avg score: " + str(score1/test_runs))
-	print("DQN avg score: " + str(score2/test_runs))
-	print("Minimax wins: " + str(player1))
-	print("DQN wins: " + str(player2))
+
 	'''
-#play_snake_game(minimax_agent_first_index, minimax_agent_second_index)
 '''
 train()
